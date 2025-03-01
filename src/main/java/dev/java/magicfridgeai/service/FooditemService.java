@@ -23,7 +23,7 @@ public class FooditemService {
         return fooditemRepository.findById(id);
     }
 
-    public List<Fooditem> findAll(Long id){
+    public List<Fooditem> findAll(){
         return fooditemRepository.findAll();
     }
 
