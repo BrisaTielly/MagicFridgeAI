@@ -11,6 +11,8 @@ public class WebClientConfig {
     @Value("${chatgpt.api.url:https://api.openai.com/v1/chat/completions}")
     private String chatGptApiUrl;
 
+    //Reativo: Reage a mudanças 
+
     //O WebClient é uma ferramenta do Spring para fazer chamadas HTTP (como GET, POST, PUT, DELETE) para APIs externas ou serviços web. Ele é moderno, eficiente e foi criado para substituir o antigo RestTemplate.
 
     //Aplicação de forma configurada
