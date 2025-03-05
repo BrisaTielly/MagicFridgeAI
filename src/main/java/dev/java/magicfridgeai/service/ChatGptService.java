@@ -1,6 +1,8 @@
 package dev.java.magicfridgeai.service;
 
 import dev.java.magicfridgeai.entity.Fooditem;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -31,16 +33,16 @@ public class ChatGptService {
 
     //Vai acessar a URL e vai fazer uma requisição direta para o chatgpt
     //É uma promessa de uma string(a string prometida no caso é a receita gerada)
-    public Mono<String> generateRecipe(List<Fooditem> fooditems){
+    public Mono<String> generateRecipe(List<Fooditem> fooditems) {
         //Transformar a lista de alimentos em uma string bonitinha
         String food = fooditems.stream()
                 .map(item -> String.format("%s (%s) - Quantidade: %d, Validade: %s",
                         item.getName(), item.getFoodCategory(), item.getQuantity(), item.getExpiryDate()))
                 .collect(Collectors.joining("/n"));
-                //Vai sair tipo assim:
-                //Maçã (Fruta) - Quantidade: 5, Validade: 10/03/2025
-                //Leite (Laticínio) - Quantidade: 2, Validade: 05/03/2025
-                //Arroz (Grão) - Quantidade: 1, Validade: 20/12/2025
+        //Vai sair tipo assim:
+        //Maçã (Fruta) - Quantidade: 5, Validade: 10/03/2025
+        //Leite (Laticínio) - Quantidade: 2, Validade: 05/03/2025
+        //Arroz (Grão) - Quantidade: 1, Validade: 20/12/2025
         String prompt = "Baseado nos seguintes alimentos, sugira uma receita criativa e prática:\n" + food;
 
         //Fazendo o corpo da requisição
@@ -53,6 +55,24 @@ public class ChatGptService {
                         Map.of("role", "user", "content", prompt)
                 )
         );
+
+        return webClient.post()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .map(response ->
+                        {
+                            var choices = (List<Map<String, Object>>) response.get("choices");
+                            if (choices != null && !choices.isEmpty()) {
+                             Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
+                             return message.get("content").toString();
+                            }else {
+                                return "Nenhuma receita gerada";
+                            }
+                        }
+                );
     }
 
 }
