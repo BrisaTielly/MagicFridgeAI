@@ -32,7 +32,7 @@ public class ChatGptService {
         //Maçã (Fruta) - Quantidade: 5, Validade: 10/03/2025
         //Leite (Laticínio) - Quantidade: 2, Validade: 05/03/2025
         //Arroz (Grão) - Quantidade: 1, Validade: 20/12/2025
-        String prompt = "Baseado nos seguintes alimentos, sugira uma receita criativa, pratica e curta:\n" + food;
+        String prompt = "Baseado nos seguintes alimentos, sugira uma receita criativa, pratica e curta, use somente os alimentos informados:\n" + food;
 
         //Fazendo o corpo da requisição
         Map<String, Object> requestBody = Map.of(
