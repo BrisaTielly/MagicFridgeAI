@@ -14,22 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class ChatGptService {
     private final WebClient webClient;
-    private String apiKey = System.getenv("API_KEY");
+    private final String apiKey = System.getenv("API_KEY");
 
     public ChatGptService(WebClient webClient) {
         this.webClient = webClient;
     }
-
-//    curl https://api.openai.com/v1/chat/completions \
-//            -H "Content-Type: application/json" \
-//            -H "Authorization: Bearer $OPENAI_API_KEY" \
-//            -d '{
-//            "model": "gpt-4o-mini",
-//            "messages": [
-//            {"role": "user", "content": "Say this is a test!"}
-//            ],
-//            "temperature": 0.7
-//}'
 
     //Vai acessar a URL e vai fazer uma requisição direta para o chatgpt
     //É uma promessa de uma string(a string prometida no caso é a receita gerada)
@@ -43,7 +32,7 @@ public class ChatGptService {
         //Maçã (Fruta) - Quantidade: 5, Validade: 10/03/2025
         //Leite (Laticínio) - Quantidade: 2, Validade: 05/03/2025
         //Arroz (Grão) - Quantidade: 1, Validade: 20/12/2025
-        String prompt = "Baseado nos seguintes alimentos, sugira uma receita criativa e prática:\n" + food;
+        String prompt = "Baseado nos seguintes alimentos, sugira uma receita criativa, pratica e curta:\n" + food;
 
         //Fazendo o corpo da requisição
         Map<String, Object> requestBody = Map.of(
